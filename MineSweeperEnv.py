@@ -18,7 +18,7 @@ class MineSweeperEnv(gym.Env):
         self.observation_space = spaces.Box(np.full(HEIGHT * WIDTH, -2), np.full(HEIGHT * WIDTH, 8), dtype=np.int)
         self.n_not_bombs_left = 0
         self.reward = [1, -1, 0.9, -0.3] #win, lose, progress, no progress
-        self.RANDOM_BOMS = False
+        self.RANDOM_BOMS = True
         self.n_wins = 0
         self.WIN = False
 

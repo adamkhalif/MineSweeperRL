@@ -148,6 +148,7 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
         ep_reward = 0  # Initialize "Episodic reward", i.e. the total reward for episode, when disregarding discount factor.
         q_buffer = []
         steps = 0
+        wins = []
         while not finish_episode:
             if enable_visualization:
                 env.render()  # comment this line out if you don't want to / cannot render the environment on your system
@@ -188,8 +189,14 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
 
         # Running average of episodic rewards (total reward, disregarding discount factor)
         R_avg.append(.05 * R_buffer[i] + .95 * R_avg[i - 1]) if i > 0 else R_avg.append(R_buffer[i])
-        if i>0:
-            print('Win rate: {:.2f}%, Episode {:d}, Clickable boxes left: {:d}, Win?: {:1d}, Reward: {:.1f}'.format((env.n_wins/i)*100, i, env.n_not_bombs_left, env.WIN, ep_reward))
+        if env.WIN:
+            wins.append(1)
+        else:
+            wins.append(0)
+        if i > 100:
+            avg_wins = sum(wins[-100:-1])
+
+            print('Win rate: {:.2f}%, Episode {:d}, Clickable boxes left: {:d}, Win?: {:1d}, Reward: {:.1f}'.format(avg_wins, i, env.n_not_bombs_left, env.WIN, ep_reward))
         """print('Episode: {:d}, Total Reward (running avg): {:4.1f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
                                                                                                                   ep_reward,
                                                                                                                   R_avg[
