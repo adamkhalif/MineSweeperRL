@@ -30,4 +30,5 @@ replay_buffer = ExperienceReplay(device, num_states)
 
 # Train
 R, R_avg = train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=enable_visualization, batch_size=batch_size, gamma=gamma)
+
 plot_reward(R,R_avg)

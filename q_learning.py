@@ -188,8 +188,9 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
 
         # Running average of episodic rewards (total reward, disregarding discount factor)
         R_avg.append(.05 * R_buffer[i] + .95 * R_avg[i - 1]) if i > 0 else R_avg.append(R_buffer[i])
-
-        print('Episode: {:d}, Total Reward (running avg): {:4.1f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
+        if i>0:
+            print('Win rate: {:.2f}%, Episode {:d}, Clickable boxes left: {:d}, Win?: {:1d}, Reward: {:.1f}'.format((env.n_wins/i)*100, i, env.n_not_bombs_left, env.WIN, ep_reward))
+        """print('Episode: {:d}, Total Reward (running avg): {:4.1f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
                                                                                                                   ep_reward,
                                                                                                                   R_avg[
                                                                                                                       -1],
@@ -197,7 +198,7 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
                                                                                                                   np.mean(
                                                                                                                       np.array(
                                                                                                                           q_buffer))))
-
+"""
         # If running average > 195 (close to 200), the task is considered solved
         if R_avg[-1] > 195:
             return R_buffer, R_avg
