@@ -67,11 +67,11 @@ class QNetwork(nn.Module):
         self._num_states = num_states
         self._num_actions = num_actions
 
-        self._fc1 = nn.Linear(self._num_states, 1000)
+        self._fc1 = nn.Linear(self._num_states, 100)
         self._relu1 = nn.ReLU(inplace=True)
-        self._fc2 = nn.Linear(1000, 600)
+        self._fc2 = nn.Linear(100, 60)
         self._relu2 = nn.ReLU(inplace=True)
-        self._fc_final = nn.Linear(600, self._num_actions)
+        self._fc_final = nn.Linear(60, self._num_actions)
 
         # Initialize all bias parameters to 0, according to old Keras implementation
         nn.init.zeros_(self._fc1.bias)

@@ -141,6 +141,7 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
     cnt_updates = 0
     R_buffer = []
     R_avg = []
+    wins = []
     for i in range(num_episodes):
         state = env.reset()  # Initial state
         state = state[None, :]  # Add singleton dimension, to represent as batch of size 1.
@@ -148,7 +149,6 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
         ep_reward = 0  # Initialize "Episodic reward", i.e. the total reward for episode, when disregarding discount factor.
         q_buffer = []
         steps = 0
-        wins = []
         while not finish_episode:
             if enable_visualization:
                 env.render()  # comment this line out if you don't want to / cannot render the environment on your system
