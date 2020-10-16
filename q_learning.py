@@ -189,7 +189,7 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
         # Running average of episodic rewards (total reward, disregarding discount factor)
         R_avg.append(.05 * R_buffer[i] + .95 * R_avg[i - 1]) if i > 0 else R_avg.append(R_buffer[i])
 
-        print('Episode: {:d}, Total Reward (running avg): {:4.0f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
+        print('Episode: {:d}, Total Reward (running avg): {:4.1f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
                                                                                                                   ep_reward,
                                                                                                                   R_avg[
                                                                                                                       -1],
