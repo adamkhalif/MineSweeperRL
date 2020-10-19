@@ -60,6 +60,35 @@ class ExperienceReplay:
                          device=self._device),
         )
 
+class QNetworkConv(nn.Module):
+    def __init__(self, num_states, num_actions, dim=3):
+        super().__init__()
+        self.dim = dim
+        self._num_states = num_states
+        self._num_actions = num_actions
+
+        self._conv = nn.Conv2d(1, 1, 3, stride=1, padding=1)
+        self._relu1 = nn.ReLU(inplace=True)
+        self._fc1 = nn.Linear(self._num_states, 100)
+        self._relu2 = nn.ReLU(inplace=True)
+        self._fc_final = nn.Linear(100, self._num_actions)
+
+
+
+
+        # Initialize all bias parameters to 0, according to old Keras implementation
+        nn.init.zeros_(self._fc1.bias)
+        nn.init.zeros_(self._fc2.bias)
+        nn.init.zeros_(self._fc_final.bias)
+        # Initialize final layer uniformly in [-1e-6, 1e-6] range, according to old Keras implementation
+        nn.init.uniform_(self._fc_final.weight, a=-1e-6, b=1e-6)
+
+    def forward(self, state):
+        state = torch.reshape(state(self.dim, self.dim))
+        h = self._relu1(self._conv(state))
+        h = self._relu2(self._fc1(h))
+        q_values = self._fc_final(h)
+        return q_values
 
 class QNetwork(nn.Module):
     def __init__(self, num_states, num_actions):
@@ -88,17 +117,24 @@ class QNetwork(nn.Module):
 
 
 class DoubleQLearningModel(object):
-    def __init__(self, device, num_states, num_actions, learning_rate):
+    def __init__(self, device, num_states, num_actions, learning_rate, conv=False, dim=3):
         self._device = device
         self._num_states = num_states
         self._num_actions = num_actions
         self._lr = learning_rate
 
         # Define the two deep Q-networks
-        self.online_model = QNetwork(self._num_states,
-                                     self._num_actions).to(device=self._device)
-        self.offline_model = QNetwork(
-            self._num_states, self._num_actions).to(device=self._device)
+        if conv:
+            self.online_model = QNetworkConv(self._num_states,
+                                         self._num_actions, dim=dim).to(device=self._device)
+            self.offline_model = QNetworkConv(
+                self._num_states, self._num_actions, dim=dim).to(device=self._device)
+
+        else:
+            self.online_model = QNetwork(self._num_states,
+                                         self._num_actions).to(device=self._device)
+            self.offline_model = QNetwork(
+                self._num_states, self._num_actions).to(device=self._device)
 
         # Define optimizer. Should update online network parameters only.
         self.optimizer = torch.optim.RMSprop(self.online_model.parameters(),

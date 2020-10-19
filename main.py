@@ -17,7 +17,8 @@ N_BOMBS = 1
 eps = 1.
 eps_end = 0
 eps_decay = 1/(num_episodes-200)
-
+conv=True
+dim = HEIGHT
 
 # Create the environment
 env = MineSweeperEnv(HEIGHT, WIDTH, N_BOMBS,reward)
@@ -35,7 +36,7 @@ num_states = env.observation_space.shape[0]
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #device = torch.device("cpu")
 # Object holding our online / offline Q-Networks
-ddqn = DoubleQLearningModel(device, num_states, num_actions, learning_rate)
+ddqn = DoubleQLearningModel(device, num_states, num_actions, learning_rate, conv=conv, dim=dim)
 
 # Create replay buffer, where experience in form of tuples <s,a,r,s',t>, gathered from the environment is stored
 # for training

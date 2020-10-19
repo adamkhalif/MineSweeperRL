@@ -41,7 +41,7 @@ def eps_greedy_policy(q_values, eps, forbidden_actions):
 
     q_values[forbidden_actions] = np.NINF
     #best_action_index = np.random.choice(np.flatnonzero(q_values == q_values.max()))
-    best_action_index = torch.flatten(torch.nonzero(q_values == q_values.max()))
+    best_action_index = torch.multinomial(torch.flatten(torch.nonzero(q_values == q_values.max())))
     l = len(q_values)
     #if np.all(q_values == q_values[0]):
     #    best_action_index = np.random.randint(0, l)
