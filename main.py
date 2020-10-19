@@ -6,17 +6,17 @@ from plot_functions import plot_reward
 
 
 
-reward = [100, -300, 50, -0]
-num_episodes = 4000
+reward = [1, -4.5, 0.5, -0]
+num_episodes = 100000
 batch_size = 128
-gamma = 0.01
+gamma = 0.5
 learning_rate = 1e-4
 HEIGHT = 3
 WIDTH = 3
 N_BOMBS = 1
 eps = 1.
 eps_end = 0
-eps_decay = .001
+eps_decay = 1/(num_episodes-200)
 
 
 # Create the environment
