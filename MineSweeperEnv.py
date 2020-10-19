@@ -18,6 +18,7 @@ class MineSweeperEnv(gym.Env):
         self.observation_space = spaces.Box(np.full(HEIGHT * WIDTH, -2), np.full(HEIGHT * WIDTH, 8), dtype=np.int)
         self.n_not_bombs_left = 0
         self.reward = [100, -300, 0, -0] #win, lose, progress, no progress
+
         self.RANDOM_BOMS = False
         self.n_wins = 0
         self.WIN = False
@@ -60,6 +61,7 @@ class MineSweeperEnv(gym.Env):
         return observation, reward, done, {}
 
     def reset(self):
+        self.forbidden_actions = np.full((self.WIDTH * self.HEIGHT), False)
         self.n_not_bombs_left = self.HEIGHT * self.WIDTH - self.N_BOMBS
         self.bomb_env = np.zeros((self.HEIGHT, self.WIDTH))
         self.state = np.full(self.HEIGHT * self.WIDTH, -1)

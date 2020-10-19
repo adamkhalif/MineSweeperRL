@@ -31,7 +31,7 @@ def value_iteration(gamma, mdp):
     return V, pi
 
 
-def eps_greedy_policy(q_values, eps):
+def eps_greedy_policy(q_values, eps, forbidden_actions):
     '''
     Creates an epsilon-greedy policy
     :param q_values: set of Q-values of shape (num actions,)
@@ -39,13 +39,18 @@ def eps_greedy_policy(q_values, eps):
     :return: policy of shape (num actions,)
     '''
 
-    best_action_index = np.argmax(q_values)
+    q_values[forbidden_actions] = np.NINF
+    best_action_index = np.random.choice(np.flatnonzero(q_values == q_values.max()))
     l = len(q_values)
-    if np.all(q_values == q_values[0]):
-        best_action_index = np.random.randint(0, l)
+    #if np.all(q_values == q_values[0]):
+    #    best_action_index = np.random.randint(0, l)
 
-    p = eps / l
+    n_forbidden_actions = np.count_nonzero(forbidden_actions)
+
+    p = eps / (l-n_forbidden_actions)
+
     policy = np.full([l], p)
+    policy[forbidden_actions] = 0
     policy[best_action_index] += 1 - eps
 
     return policy
@@ -72,11 +77,11 @@ def calc_q_and_take_action(ddqn, state, eps, forbidden_actions):
 
     q_online_curr = ddqn.online_model(torch.Tensor(state)).detach().numpy().flatten()
 
-    q_online_curr_temp = np.copy(q_online_curr)
+    #q_online_curr_temp = np.copy(q_online_curr)
 
-    q_online_curr_temp[forbidden_actions] = np.NINF
+    #q_online_curr_temp[forbidden_actions] = np.NINF
 
-    pi = eps_greedy_policy(q_online_curr_temp, eps)
+    pi = eps_greedy_policy(q_online_curr, eps, forbidden_actions)
 
     curr_action = np.random.choice(range(len(pi)), p=pi)
 
@@ -154,10 +159,7 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
         ep_reward = 0  # Initialize "Episodic reward", i.e. the total reward for episode, when disregarding discount factor.
         q_buffer = []
         steps = 0
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
         while not finish_episode:
             if enable_visualization:
                 env.render()  # comment this line out if you don't want to / cannot render the environment on your system
