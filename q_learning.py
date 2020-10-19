@@ -40,7 +40,8 @@ def eps_greedy_policy(q_values, eps, forbidden_actions):
     '''
 
     q_values[forbidden_actions] = np.NINF
-    best_action_index = np.random.choice(np.flatnonzero(q_values == q_values.max()))
+    #best_action_index = np.random.choice(np.flatnonzero(q_values == q_values.max()))
+    best_action_index = torch.flatten(torch.nonzero(q_values == q_values.max()))
     l = len(q_values)
     #if np.all(q_values == q_values[0]):
     #    best_action_index = np.random.randint(0, l)
@@ -74,8 +75,12 @@ def calc_q_and_take_action(ddqn, state, eps, forbidden_actions):
     # YOUR CODE HERE
 
     # q_offline = dqqn.offline_model(state)
+    #temp_state = torch.Tensor(state).detach().numpy().flatten()
+    state = torch.Tensor(state).detach().flatten()
 
-    q_online_curr = ddqn.online_model(torch.Tensor(state)).detach().numpy().flatten()
+    state = state.to(device=ddqn._device)
+    q_online_curr = ddqn.online_model(state)
+    #q_online_curr = ddqn.online_model(torch.Tensor(state)).detach().numpy().flatten()
 
     #q_online_curr_temp = np.copy(q_online_curr)
 
@@ -150,8 +155,9 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
     R_buffer = []
     R_avg = []
     wins = []
+    clickable_boxes = []
     for i in range(num_episodes):
-        state = env.reset()  # Initial state
+        state = env.reset() # Initial state
         state = state[None, :]  # Add singleton dimension, to represent as batch of size 1.
         finish_episode = False  # Initialize
         ep_reward = 0  # Initialize "Episodic reward", i.e. the total reward for episode, when disregarding discount factor.
@@ -205,7 +211,6 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
             wins.append(0)
         if i > 100:
             avg_wins = sum(wins[-100:-1])
-
             print('Epsilon: {:.3f}, Win rate: {:.2f}%, Episode {:d}, Clickable boxes left: {:d}, Win?: {:1d}, Reward: {:.1f}'.format(eps,avg_wins, i, env.n_not_bombs_left, env.WIN, ep_reward))
         """print('Episode: {:d}, Total Reward (running avg): {:4.1f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
                                                                                                                   ep_reward,
@@ -219,5 +224,6 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
         # If running average > 195 (close to 200), the task is considered solved
         #if R_avg[-1] > 195:
          #   return R_buffer, R_avg
+
     return R_buffer, R_avg
 

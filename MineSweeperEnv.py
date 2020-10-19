@@ -2,6 +2,7 @@ import gym
 from gym import spaces
 import numpy as np
 import random
+import torch
 
 
 class MineSweeperEnv(gym.Env):
