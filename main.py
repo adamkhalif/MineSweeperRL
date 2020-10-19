@@ -14,6 +14,7 @@ enable_visualization = False
 num_actions = env.n_actions
 num_states = env.observation_space.shape[0]
 
+
 num_episodes = 2000
 batch_size = 128
 gamma = 0.01

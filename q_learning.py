@@ -51,7 +51,7 @@ def eps_greedy_policy(q_values, eps):
     return policy
 
 
-def calc_q_and_take_action(ddqn, state, eps):
+def calc_q_and_take_action(ddqn, state, eps, forbidden_actions):
     '''
     Calculate Q-values for current state, and take an action according to an epsilon-greedy policy.
     Inputs:
@@ -71,7 +71,12 @@ def calc_q_and_take_action(ddqn, state, eps):
     # q_offline = dqqn.offline_model(state)
 
     q_online_curr = ddqn.online_model(torch.Tensor(state)).detach().numpy().flatten()
-    pi = eps_greedy_policy(q_online_curr, eps)
+
+    q_online_curr_temp = np.copy(q_online_curr)
+
+    q_online_curr_temp[forbidden_actions] = np.NINF
+
+    pi = eps_greedy_policy(q_online_curr_temp, eps)
 
     curr_action = np.random.choice(range(len(pi)), p=pi)
 
@@ -149,6 +154,10 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
         ep_reward = 0  # Initialize "Episodic reward", i.e. the total reward for episode, when disregarding discount factor.
         q_buffer = []
         steps = 0
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         while not finish_episode:
             if enable_visualization:
                 env.render()  # comment this line out if you don't want to / cannot render the environment on your system
@@ -157,7 +166,8 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
             # Take one step in environment. No need to compute gradients,
             # we will just store transition to replay buffer, and later sample a whole batch
             # from the replay buffer to actually take a gradient step.
-            q_online_curr, curr_action = calc_q_and_take_action(ddqn, state, eps)
+            forbidden_actions = env.forbidden_actions
+            q_online_curr, curr_action = calc_q_and_take_action(ddqn, state, eps, forbidden_actions)
             q_buffer.append(q_online_curr)
             new_state, reward, finish_episode, _ = env.step(curr_action)  # take one step in the evironment
             new_state = new_state[None, :]

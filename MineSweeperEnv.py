@@ -21,9 +21,12 @@ class MineSweeperEnv(gym.Env):
         self.RANDOM_BOMS = False
         self.n_wins = 0
         self.WIN = False
+        self.forbidden_actions = np.full((WIDTH * HEIGHT), False)
+
 
     def step(self, action):
         reward = 0
+        self.forbidden_actions[action] = True
         self.WIN = False
         row = action // self.HEIGHT
         col = action % self.WIDTH
