@@ -78,16 +78,21 @@ class QNetworkConv(nn.Module):
 
         # Initialize all bias parameters to 0, according to old Keras implementation
         nn.init.zeros_(self._fc1.bias)
-        nn.init.zeros_(self._fc2.bias)
+        nn.init.zeros_(self._conv.bias)
         nn.init.zeros_(self._fc_final.bias)
         # Initialize final layer uniformly in [-1e-6, 1e-6] range, according to old Keras implementation
         nn.init.uniform_(self._fc_final.weight, a=-1e-6, b=1e-6)
 
     def forward(self, state):
-        state = torch.reshape(state(self.dim, self.dim))
+
+        state = state.reshape(-1,1, self.dim, self.dim)
+
         h = self._relu1(self._conv(state))
+        h = h.view(-1, self.dim*self.dim)
         h = self._relu2(self._fc1(h))
         q_values = self._fc_final(h)
+
+
         return q_values
 
 class QNetwork(nn.Module):

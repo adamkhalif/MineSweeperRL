@@ -7,9 +7,9 @@ from plot_functions import plot_reward
 
 
 reward = [1, -4.5, 0.5, 0] #win lose progress no progress
-num_episodes = 100000
+num_episodes = 10000
 batch_size = 1024
-gamma = 0.1
+gamma = 0.01
 learning_rate = 1e-4
 HEIGHT = 3
 WIDTH = 3
