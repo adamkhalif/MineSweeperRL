@@ -142,11 +142,9 @@ def sample_batch_and_calculate_loss(ddqn, replay_buffer, batch_size, gamma):
     return loss
 
 
-def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=False, batch_size=64, gamma=.94):
+def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=False, batch_size=64, gamma=.94, eps=1., eps_end=0, eps_decay=.001):
     Transition = namedtuple("Transition", ["s", "a", "r", "next_s", "t"])
-    eps = 1.
-    eps_end = 0
-    eps_decay = .001
+
     tau = 1000
     cnt_updates = 0
     R_buffer = []

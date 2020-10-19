@@ -6,7 +6,7 @@ import random
 
 class MineSweeperEnv(gym.Env):
 
-    def __init__(self, HEIGHT=9, WIDTH=9, N_BOMBS=10):
+    def __init__(self, HEIGHT=9, WIDTH=9, N_BOMBS=10,reward=[100, -300, 50, -0]):
         super().__init__()
         self.HEIGHT = HEIGHT
         self.WIDTH = WIDTH
@@ -17,9 +17,9 @@ class MineSweeperEnv(gym.Env):
         self.bomb_env = np.array((HEIGHT, WIDTH))
         self.observation_space = spaces.Box(np.full(HEIGHT * WIDTH, -2), np.full(HEIGHT * WIDTH, 8), dtype=np.int)
         self.n_not_bombs_left = 0
-        self.reward = [100, -300, 0, -0] #win, lose, progress, no progress
+        self.reward = reward #win, lose, progress, no progress
 
-        self.RANDOM_BOMS = False
+        self.RANDOM_BOMS = True
         self.n_wins = 0
         self.WIN = False
         self.forbidden_actions = np.full((WIDTH * HEIGHT), False)
