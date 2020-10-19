@@ -135,7 +135,7 @@ def sample_batch_and_calculate_loss(ddqn, replay_buffer, batch_size, gamma):
 def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=False, batch_size=64, gamma=.94):
     Transition = namedtuple("Transition", ["s", "a", "r", "next_s", "t"])
     eps = 1.
-    eps_end = .1
+    eps_end = 0
     eps_decay = .001
     tau = 1000
     cnt_updates = 0
@@ -196,7 +196,7 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
         if i > 100:
             avg_wins = sum(wins[-100:-1])
 
-            print('Win rate: {:.2f}%, Episode {:d}, Clickable boxes left: {:d}, Win?: {:1d}, Reward: {:.1f}'.format(avg_wins, i, env.n_not_bombs_left, env.WIN, ep_reward))
+            print('Epsilon: {:.3f}, Win rate: {:.2f}%, Episode {:d}, Clickable boxes left: {:d}, Win?: {:1d}, Reward: {:.1f}'.format(eps,avg_wins, i, env.n_not_bombs_left, env.WIN, ep_reward))
         """print('Episode: {:d}, Total Reward (running avg): {:4.1f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
                                                                                                                   ep_reward,
                                                                                                                   R_avg[
@@ -207,7 +207,7 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
                                                                                                                           q_buffer))))
 """
         # If running average > 195 (close to 200), the task is considered solved
-        if R_avg[-1] > 195:
-            return R_buffer, R_avg
+        #if R_avg[-1] > 195:
+         #   return R_buffer, R_avg
     return R_buffer, R_avg
 
