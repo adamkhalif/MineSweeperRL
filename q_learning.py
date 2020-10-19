@@ -209,7 +209,7 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
             wins.append(1)
         else:
             wins.append(0)
-        if i > 100:
+        if (i % 1000) == 0:
             avg_wins = sum(wins[-100:-1])
             print('Epsilon: {:.3f}, Win rate: {:.2f}%, Episode {:d}, Clickable boxes left: {:d}, Win?: {:1d}, Reward: {:.1f}'.format(eps,avg_wins, i, env.n_not_bombs_left, env.WIN, ep_reward))
         """print('Episode: {:d}, Total Reward (running avg): {:4.1f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
