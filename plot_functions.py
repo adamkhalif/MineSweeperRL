@@ -26,7 +26,7 @@ def plot_reward(data):
         lines.extend(axLine)
         labels.extend(axLabel)
 
-    fig.legend(lines, labels, loc="lower right")
+    fig.legend(lines, labels, loc="upper center")
 
     plt.show()
 
