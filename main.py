@@ -18,15 +18,15 @@ def load_from_json(filepath):
 
 if __name__ == '__main__':
     reward = [1, -1, 0.9, 0]  # win lose progress no progress
-    filepath = "Result_RANDOM_BOMBS_100k_gamma0.json"
-    num_episodes = 100000
+    filepath = "Result_RANDOM_BOMBS_200k_gamma0.json"
+    num_episodes = 200000
     batch_size = 64
     gamma = 0
     learning_rate = 1e-4
     HEIGHT = 3
     WIDTH = 3
-    N_BOMBS = 2
-    eps = 0.7
+    N_BOMBS = 1
+    eps = 1
     eps_end = 0
     eps_decay = eps/(num_episodes-num_episodes*0.5)
     conv = True
