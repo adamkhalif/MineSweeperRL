@@ -7,7 +7,7 @@ from plot_functions import plot_reward
 
 
 reward = [10, -3, 1, 0] #win lose progress no progress
-num_episodes = 50000
+num_episodes = 30000
 batch_size = 128
 
 gamma = 0.62
@@ -15,9 +15,9 @@ learning_rate = 1e-4 #1e-4
 HEIGHT = 3
 WIDTH = 3
 N_BOMBS = 1
-eps = 1.
+eps = 0.7
 eps_end = 0
-eps_decay = 1/(num_episodes-10000)
+eps_decay = 1/(num_episodes)
 conv = True
 dim = HEIGHT
 

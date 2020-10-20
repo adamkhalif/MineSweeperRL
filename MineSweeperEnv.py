@@ -16,7 +16,7 @@ class MineSweeperEnv(gym.Env):
         self.n_actions = HEIGHT * WIDTH
         self.state = np.array(HEIGHT * WIDTH)
         self.bomb_env = np.array((HEIGHT, WIDTH))
-        self.observation_space = spaces.Box(np.full(HEIGHT * WIDTH, -2), np.full(HEIGHT * WIDTH, 8), dtype=np.int)
+        self.observation_space = spaces.Box(np.full(HEIGHT * WIDTH, -2), np.full(HEIGHT * WIDTH, 1), dtype=np.int)
         self.n_not_bombs_left = 0
         self.reward = reward #win, lose, progress, no progress
 
