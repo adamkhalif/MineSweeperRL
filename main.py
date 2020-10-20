@@ -27,8 +27,8 @@ if __name__ == '__main__':
     WIDTH = 3
     N_BOMBS = 1
     eps = 1.
-    eps_end = 0
-    eps_decay = 1/(num_episodes-num_episodes*0.4)
+    eps_end = 1
+    eps_decay = 0#1/(num_episodes-num_episodes*0.4)
     conv = True
     dim = HEIGHT
 
