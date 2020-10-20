@@ -21,7 +21,7 @@ if __name__ == '__main__':
     filepath = "Result_RANDOM_BOMBS_20k.json"
     num_episodes = 20000
     batch_size = 128
-    gamma = 0.62
+    gamma = 0.9
     learning_rate = 1e-4
     HEIGHT = 3
     WIDTH = 3
