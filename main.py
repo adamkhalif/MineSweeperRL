@@ -59,9 +59,9 @@ if __name__ == '__main__':
     result_dict["avg_wins"] = avg_wins
     result_dict["episodes"] = i
     result_dict["ep_reward"] = ep_reward
-    result_dict["running average"] = R_avg
-    result_dict["boxes left"] = R_avg_progress
+    result_dict["running_average"] = R_avg
+    result_dict["boxes_left"] = R_avg_progress
 
     write_to_json(result_dict, filepath)
     data = load_from_json(filepath)
-    plot_reward(R_avg, data)
+    plot_reward(data)
