@@ -9,8 +9,9 @@ from plot_functions import plot_reward
 reward = [1, -4.5, 0.5, 0] #win lose progress no progress
 num_episodes = 30000
 batch_size = 256
-gamma = 0.1
-learning_rate = 1e-4
+
+gamma = 0.7
+learning_rate = 1e-2
 HEIGHT = 3
 WIDTH = 3
 N_BOMBS = 1
