@@ -20,7 +20,7 @@ class MineSweeperEnv(gym.Env):
         self.n_not_bombs_left = 0
         self.reward = reward #win, lose, progress, no progress
 
-        self.RANDOM_BOMS = False
+        self.RANDOM_BOMS = True #Never change this!
         self.n_wins = 0
         self.WIN = False
         self.forbidden_actions = np.full((WIDTH * HEIGHT), False)
