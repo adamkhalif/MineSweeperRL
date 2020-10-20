@@ -17,11 +17,11 @@ def load_from_json(filepath):
     return json_data
 
 if __name__ == '__main__':
-    reward = [10, -3, 1, 0]  # win lose progress no progress
+    reward = [0, -3, 1, 0]  # win lose progress no progress
     filepath = "Result_RANDOM_BOMBS_20k_gamma09.json"
     num_episodes = 20000
     batch_size = 128
-    gamma = 0.9
+    gamma = 0.6
     learning_rate = 1e-4
     HEIGHT = 3
     WIDTH = 3
