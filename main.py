@@ -6,8 +6,8 @@ from plot_functions import plot_reward
 import json
 
 reward = [10, -3, 1, 0]  # win lose progress no progress
-filepath = "Result_RANDOM_BOMBS.json"
-num_episodes = 20000
+filepath = "Result_RANDOM_BOMBS_50k.json"
+num_episodes = 50000
 batch_size = 128
 gamma = 0.2
 learning_rate = 1e-4
@@ -16,7 +16,7 @@ WIDTH = 3
 N_BOMBS = 1
 eps = 1.
 eps_end = 0
-eps_decay = 1/(num_episodes-5000)
+eps_decay = 1/(num_episodes-15000)
 conv = True
 dim = HEIGHT
 
