@@ -18,7 +18,7 @@ def load_from_json(filepath):
 
 if __name__ == '__main__':
     reward = [10, -3, 1, 0]  # win lose progress no progress
-    filepath = "Result_RANDOM_BOMBS_20k.json"
+    filepath = "Result_RANDOM_BOMBS_20k_gamma09.json"
     num_episodes = 20000
     batch_size = 128
     gamma = 0.9
