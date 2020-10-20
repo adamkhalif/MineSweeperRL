@@ -1,11 +1,32 @@
 
 import matplotlib.pyplot as plt
 
-def plot_reward(R, R_avg):
-    #rewards = plt.plot(R, alpha=.4, label='Number of clicks')
-    avg_rewards = plt.plot(R_avg,label='avg R')
-    plt.legend(bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
-    plt.xlabel('Episode')
-    plt.ylim(-5, 6)
+def plot_reward(R_avg, data):
+    # First line
+    fig, ax1 = plt.subplots()
+    color = 'tab:red'
+    ax1.set_xlabel('Episodes')
+    ax1.set_ylabel('Reward', color=color)
+    ax1.plot(R_avg, color=color, label="Average reward")
+    ax1.tick_params(axis='y', labelcolor=color)
+    # Second line
+    ax2 = ax1.twinx()
+    color = 'tab:blue'
+    ax2.set_ylabel('Winrate %', color=color)
+    ax2.plot(data["avg_wins"], color=color, label="Average winrate")
+    ax2.tick_params(axis='y', labelcolor=color)
+
+    fig.tight_layout()
+    # Add legend
+    lines = []
+    labels = []
+
+    for ax in fig.axes:
+        axLine, axLabel = ax.get_legend_handles_labels()
+        lines.extend(axLine)
+        labels.extend(axLabel)
+
+    fig.legend(lines, labels, loc="lower right")
+
     plt.show()
 

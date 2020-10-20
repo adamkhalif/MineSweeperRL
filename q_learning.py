@@ -160,6 +160,10 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
     R_buffer = []
     R_avg = []
     wins = []
+    R_eps = []
+    R_avg_wins = []
+    R_i = []
+    R_ep_reward = []
     clickable_boxes = []
     for i in range(num_episodes):
         state = env.reset() # Initial state
@@ -214,11 +218,11 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
             wins.append(1)
         else:
             wins.append(0)
-        #if (i % 1000) == 0:
+        #if (i % 50) == 0:
         if i > 100:
-            avg_wins = sum(wins[-100:-1])
+            avg_wins = sum(wins[-100::])
             print('Epsilon: {:.3f}, Win rate: {:.2f}%, Episode {:d}, Clickable boxes left: {:d}, Win?: {:1d}, Reward: {:.1f}'.format(eps,avg_wins, i, env.n_not_bombs_left, env.WIN, ep_reward))
-        """print('Episode: {:d}, Total Reward (running avg): {:4.1f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
+            """print('Episode: {:d}, Total Reward (running avg): {:4.1f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
                                                                                                                   ep_reward,
                                                                                                                   R_avg[
                                                                                                                       -1],
@@ -227,9 +231,10 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
                                                                                                                       np.array(
                                                                                                                           q_buffer))))
 """
-        # If running average > 195 (close to 200), the task is considered solved
-        #if R_avg[-1] > 195:
-         #   return R_buffer, R_avg
+            R_eps.append(eps)
+            R_avg_wins.append(avg_wins)
+            R_i.append(i)
+            R_ep_reward.append(ep_reward)
 
-    return R_buffer, R_avg
+    return R_buffer, R_avg, R_eps, R_avg_wins, R_i, R_ep_reward
 
