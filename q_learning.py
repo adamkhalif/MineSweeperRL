@@ -1,6 +1,7 @@
 import numpy as np
 from collections import namedtuple
 import torch
+import random
 
 def value_iteration(gamma, mdp):
     """
@@ -41,7 +42,11 @@ def eps_greedy_policy(q_values, eps, forbidden_actions):
 
     q_values[forbidden_actions] = np.NINF
     #best_action_index = np.random.choice(np.flatnonzero(q_values == q_values.max()))
-    best_action_index = torch.flatten(torch.nonzero(q_values == q_values.max()))
+    indices = torch.nonzero(q_values == q_values.max())
+
+    random_index = random.randint(0, indices.shape[1]-1)
+
+    best_action_index = indices[random_index] #TODO: make the choice random if more than 1 max value
     l = len(q_values)
     #if np.all(q_values == q_values[0]):
     #    best_action_index = np.random.randint(0, l)

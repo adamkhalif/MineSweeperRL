@@ -7,9 +7,9 @@ from plot_functions import plot_reward
 
 
 reward = [1, -4.5, 0.5, 0] #win lose progress no progress
-num_episodes = 10000
-batch_size = 1024
-gamma = 0.01
+num_episodes = 30000
+batch_size = 128
+gamma = 0.1
 learning_rate = 1e-4
 HEIGHT = 3
 WIDTH = 3
@@ -17,7 +17,7 @@ N_BOMBS = 1
 eps = 1.
 eps_end = 0
 eps_decay = 1/(num_episodes-200)
-conv=True
+conv = True
 dim = HEIGHT
 
 # Create the environment

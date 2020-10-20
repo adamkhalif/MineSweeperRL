@@ -91,6 +91,8 @@ class QNetworkConv(nn.Module):
         h = h.view(-1, self.dim*self.dim)
         h = self._relu2(self._fc1(h))
         q_values = self._fc_final(h)
+        if q_values.shape[0] == 1:
+            q_values = q_values.view(-1)
 
 
         return q_values
@@ -118,6 +120,7 @@ class QNetwork(nn.Module):
         h = self._relu1(self._fc1(state))
         h = self._relu2(self._fc2(h))
         q_values = self._fc_final(h)
+
         return q_values
 
 
