@@ -1,13 +1,13 @@
 
 import matplotlib.pyplot as plt
 
-def plot_reward(R_avg, data):
+def plot_reward(data):
     # First line
     fig, ax1 = plt.subplots()
     color = 'tab:red'
     ax1.set_xlabel('Episodes')
-    ax1.set_ylabel('Reward', color=color)
-    ax1.plot(R_avg, color=color, label="Average reward")
+    ax1.set_ylabel('Epsilon', color=color)
+    ax1.plot(data["epsilon"], color=color, label="Epsilon")
     ax1.tick_params(axis='y', labelcolor=color)
     # Second line
     ax2 = ax1.twinx()
