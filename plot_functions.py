@@ -6,8 +6,8 @@ def plot_reward(data):
     fig, ax1 = plt.subplots()
     color = 'tab:red'
     ax1.set_xlabel('Episodes')
-    ax1.set_ylabel('Boxes left', color=color)
-    ax1.plot(data["average_progress"], color=color, label="Average progress")
+    ax1.set_ylabel('Epsilon', color=color)
+    ax1.plot(data["epsilon"], color=color, label="Epsilon")
     ax1.tick_params(axis='y', labelcolor=color)
     # Second line
     ax2 = ax1.twinx()
