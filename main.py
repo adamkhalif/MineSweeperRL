@@ -19,7 +19,7 @@ def load_from_json(filepath):
 if __name__ == '__main__':
     reward = [1, -1, 0.9, 0]  # win lose progress no progress
     filepath = "Result_RANDOM_BOMBS_norm2.json"
-    num_episodes = 2000
+    num_episodes = 200
     batch_size = 128
     gamma = 0
     learning_rate = 1e-4
@@ -56,12 +56,14 @@ if __name__ == '__main__':
     eps_list = []
     avg_wins_list = []
     R_avg_list = []
+    wins_list = []
 
-    R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress = train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=enable_visualization, batch_size=batch_size, gamma=gamma, eps=eps, eps_end=eps_end, eps_decay=eps_decay)
+    R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress, wins = train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=enable_visualization, batch_size=batch_size, gamma=gamma, eps=eps, eps_end=eps_end, eps_decay=eps_decay)
 
     eps_list.extend(eps)
     avg_wins_list.extend(avg_wins)
     R_avg_list.extend(R_avg)
+    wins_list.extend(wins)
 
     while (True):
         inp = input("Continue?: ")
@@ -69,7 +71,7 @@ if __name__ == '__main__':
         if inp == 1:
             eps = input("Epsilon?: ")
             eps = float(eps)
-            R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress = train_loop_ddqn(ddqn, env, replay_buffer,
+            R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress, wins = train_loop_ddqn(ddqn, env, replay_buffer,
                                                                                            num_episodes,
                                                                                            enable_visualization=enable_visualization,
                                                                                            batch_size=batch_size,
@@ -79,6 +81,7 @@ if __name__ == '__main__':
             eps_list.extend(eps)
             avg_wins_list.extend(avg_wins)
             R_avg_list.extend(R_avg)
+            wins_list.extend(wins)
         else:
             break
 
@@ -94,6 +97,7 @@ if __name__ == '__main__':
     result_dict["epsilon"] = eps_list
     result_dict["avg_wins"] = avg_wins_list
     result_dict["running_average"] = R_avg_list
+    result_dict["wins"] = wins_list
 
     write_to_json(result_dict, filepath)
     data = load_from_json(filepath)

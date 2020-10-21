@@ -244,5 +244,5 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
     """
 
 
-    return R_buffer, R_avg, R_eps, R_avg_wins, R_i, R_ep_reward, R_avg_progress
+    return R_buffer, R_avg, R_eps, R_avg_wins, R_i, R_ep_reward, R_avg_progress, wins
 
