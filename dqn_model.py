@@ -84,8 +84,8 @@ class QNetworkConv(nn.Module):
         h = self._norm1(state)
         h = state.reshape(-1,1, self.dim, self.dim)
         h = self._relu1(self._conv(h))
-        h = self._norm1(h)
         h = h.view(-1, self.dim*self.dim)
+        h = self._norm1(h)
         h = self._relu2(self._fc1(h))
         q_values = self._fc_final(h)
         if q_values.shape[0] == 1:
