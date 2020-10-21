@@ -66,6 +66,7 @@ class QNetworkConv(nn.Module):
         self.dim = dim
         self._num_states = num_states
         self._num_actions = num_actions
+        self._norm1 = nn.LayerNorm(self._num_states)
 
         self._conv = nn.Conv2d(1, 1, 3, stride=1, padding=1)
         self._relu1 = nn.ReLU(inplace=True)
@@ -84,10 +85,10 @@ class QNetworkConv(nn.Module):
         nn.init.uniform_(self._fc_final.weight, a=-1e-6, b=1e-6)
 
     def forward(self, state):
+        h = self._norm1(state)
+        h = state.reshape(-1,1, self.dim, self.dim)
 
-        state = state.reshape(-1,1, self.dim, self.dim)
-
-        h = self._relu1(self._conv(state))
+        h = self._relu1(self._conv(h))
         h = h.view(-1, self.dim*self.dim)
         h = self._relu2(self._fc1(h))
         q_values = self._fc_final(h)
@@ -103,9 +104,11 @@ class QNetwork(nn.Module):
         self._num_states = num_states
         self._num_actions = num_actions
 
+        self._norm1 = nn.LayerNorm(self._num_states)
         self._fc1 = nn.Linear(self._num_states, 100)
         self._relu1 = nn.ReLU(inplace=True)
         self._fc2 = nn.Linear(100, 60)
+
         self._relu2 = nn.ReLU(inplace=True)
         self._fc_final = nn.Linear(60, self._num_actions)
 
@@ -117,7 +120,8 @@ class QNetwork(nn.Module):
         nn.init.uniform_(self._fc_final.weight, a=-1e-6, b=1e-6)
 
     def forward(self, state):
-        h = self._relu1(self._fc1(state))
+        h = self._norm1(state)
+        h = self._relu1(self._fc1(h))
         h = self._relu2(self._fc2(h))
         q_values = self._fc_final(h)
 
