@@ -18,9 +18,9 @@ def load_from_json(filepath):
 
 if __name__ == '__main__':
     reward = [1, -1, 0.9, 0]  # win lose progress no progress
-    filepath = "Result_RANDOM_BOMBS_1000k_gamma0.json"
-    num_episodes = 5000
-    batch_size = 128
+    filepath = "Result_RANDOM_BOMBS_test.json"
+    num_episodes = 200
+    batch_size = 64
     gamma = 0
     learning_rate = 1e-4
     HEIGHT = 3
@@ -52,23 +52,14 @@ if __name__ == '__main__':
     replay_buffer = ExperienceReplay(device, num_states)
 
     # Train
+
+    eps_list = []
+    avg_wins_list = []
+    R_avg_list = []
+
     R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress = train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=enable_visualization, batch_size=batch_size, gamma=gamma, eps=eps, eps_end=eps_end, eps_decay=eps_decay)
 
 
-
-    result_dict = {}
-    result_dict["conv"] = conv
-    result_dict["rewards"] = reward
-    result_dict["gamma"] = gamma
-    result_dict["lr"] = learning_rate
-    result_dict["batch_size"] = batch_size
-    result_dict["eps_decay"] = eps_decay
-    result_dict["epsilon"] = eps
-    result_dict["avg_wins"] = avg_wins
-    result_dict["episodes"] = i
-    result_dict["ep_reward"] = ep_reward
-    result_dict["running_average"] = R_avg
-    result_dict["boxes_left"] = R_avg_progress
 
     while (True):
         inp = input("Continue?: ")
@@ -83,17 +74,28 @@ if __name__ == '__main__':
                                                                                            gamma=gamma, eps=eps,
                                                                                            eps_end=eps_end,
                                                                                            eps_decay=eps_decay)
-            result_dict["epsilon"].append(eps)
-            result_dict["avg_wins"].append(avg_wins)
-            result_dict["episodes"].append(i)
-            result_dict["ep_reward"].append(ep_reward)
-            result_dict["running_average"].append(R_avg)
-            result_dict["boxes_left"].append(R_avg_progress)
-            #plot_reward(result_dict)
+            eps_list.extend(eps)
+            avg_wins_list.extend(avg_wins)
+            R_avg_list.extend(R_avg)
         else:
+            eps_list.extend(eps)
+            avg_wins_list.extend(avg_wins)
+            R_avg_list.extend(R_avg)
             break
 
 
+    result_dict = {}
+    result_dict["conv"] = conv
+    result_dict["rewards"] = reward
+    result_dict["gamma"] = gamma
+    result_dict["lr"] = learning_rate
+    result_dict["batch_size"] = batch_size
+    result_dict["eps_decay"] = eps_decay
+
+    result_dict["epsilon"] = eps_list
+    result_dict["avg_wins"] = avg_wins_list
+    result_dict["running_average"] = R_avg_list
+
     write_to_json(result_dict, filepath)
-    #data = load_from_json(filepath)
-    #plot_reward(data)
+    data = load_from_json(filepath)
+    plot_reward(data)
