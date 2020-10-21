@@ -225,7 +225,9 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
         R_i.append(i)
         R_ep_reward.append(ep_reward)
         R_clickable_boxes.append(env.n_not_bombs_left)
-        if i > 100:
+        if i < 100:
+            R_avg_wins.append(0)
+        else:
             avg_wins = sum(wins[-100::])
             R_avg_wins.append(avg_wins)
             avg_progress = sum(R_clickable_boxes[-100::])/100
@@ -239,7 +241,7 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
                                                                                                                   np.mean(
                                                                                                                       np.array(
                                                                                                                           q_buffer))))
-"""
+    """
 
 
     return R_buffer, R_avg, R_eps, R_avg_wins, R_i, R_ep_reward, R_avg_progress

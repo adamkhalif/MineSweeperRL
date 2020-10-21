@@ -59,7 +59,9 @@ if __name__ == '__main__':
 
     R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress = train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=enable_visualization, batch_size=batch_size, gamma=gamma, eps=eps, eps_end=eps_end, eps_decay=eps_decay)
 
-
+    eps_list.extend(eps)
+    avg_wins_list.extend(avg_wins)
+    R_avg_list.extend(R_avg)
 
     while (True):
         inp = input("Continue?: ")
@@ -78,9 +80,6 @@ if __name__ == '__main__':
             avg_wins_list.extend(avg_wins)
             R_avg_list.extend(R_avg)
         else:
-            eps_list.extend(eps)
-            avg_wins_list.extend(avg_wins)
-            R_avg_list.extend(R_avg)
             break
 
 
