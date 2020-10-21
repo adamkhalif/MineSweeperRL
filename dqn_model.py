@@ -145,8 +145,10 @@ class DoubleQLearningModel(object):
                 self._num_states, self._num_actions).to(device=self._device)
 
         # Define optimizer. Should update online network parameters only.
-        self.optimizer = torch.optim.RMSprop(self.online_model.parameters(),
-                                             lr=self._lr)
+
+        #self.optimizer = torch.optim.RMSprop(self.online_model.parameters(),
+        #                                     lr=self._lr)
+        self.optimizer = torch.optim.Adam(self.online_model.parameters(),lr=self._lr,eps=1e-4)
 
         # Define loss function
         self._mse = nn.MSELoss(reduction='mean').to(device=self._device)
