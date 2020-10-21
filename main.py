@@ -20,7 +20,7 @@ if __name__ == '__main__':
     reward = [1, -1, 0.9, 0]  # win lose progress no progress
     filepath = "Result_RANDOM_BOMBS_1000k_gamma0.json"
     num_episodes = 5000
-    batch_size = 64
+    batch_size = 128
     gamma = 0
     learning_rate = 1e-4
     HEIGHT = 3
