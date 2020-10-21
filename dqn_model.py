@@ -67,15 +67,11 @@ class QNetworkConv(nn.Module):
         self._num_states = num_states
         self._num_actions = num_actions
         self._norm1 = nn.LayerNorm(self._num_states)
-
         self._conv = nn.Conv2d(1, 1, 3, stride=1, padding=1)
         self._relu1 = nn.ReLU(inplace=True)
         self._fc1 = nn.Linear(self._num_states, 100)
         self._relu2 = nn.ReLU(inplace=True)
         self._fc_final = nn.Linear(100, self._num_actions)
-
-
-
 
         # Initialize all bias parameters to 0, according to old Keras implementation
         nn.init.zeros_(self._fc1.bias)
@@ -87,8 +83,8 @@ class QNetworkConv(nn.Module):
     def forward(self, state):
         h = self._norm1(state)
         h = state.reshape(-1,1, self.dim, self.dim)
-
         h = self._relu1(self._conv(h))
+        h = self._norm1(h)
         h = h.view(-1, self.dim*self.dim)
         h = self._relu2(self._fc1(h))
         q_values = self._fc_final(h)
@@ -107,8 +103,9 @@ class QNetwork(nn.Module):
         self._norm1 = nn.LayerNorm(self._num_states)
         self._fc1 = nn.Linear(self._num_states, 100)
         self._relu1 = nn.ReLU(inplace=True)
+        self._norm2 = nn.LayerNorm(100)
         self._fc2 = nn.Linear(100, 60)
-
+        self._norm3 = nn.LayerNorm(60)
         self._relu2 = nn.ReLU(inplace=True)
         self._fc_final = nn.Linear(60, self._num_actions)
 
@@ -122,7 +119,9 @@ class QNetwork(nn.Module):
     def forward(self, state):
         h = self._norm1(state)
         h = self._relu1(self._fc1(h))
+        h = self._norm2(h)
         h = self._relu2(self._fc2(h))
+        h = self._norm3(h)
         q_values = self._fc_final(h)
 
         return q_values
