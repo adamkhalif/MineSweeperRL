@@ -18,9 +18,9 @@ def load_from_json(filepath):
 
 if __name__ == '__main__':
     reward = [1, -1, 0.9, 0]  # win lose progress no progress
-    filepath = "Result_RANDOM_BOMBS_norm2.json"
-    num_episodes = 200
-    batch_size = 128
+    filepath = "Result_RANDOM_BOMBS_512bc_fc.json"
+    num_episodes = 1500
+    batch_size = 512
     gamma = 0
     learning_rate = 1e-4
     HEIGHT = 3
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     eps = 1.
     eps_end = 0.1
     eps_decay = eps/(num_episodes-num_episodes*0.2)
-    conv = True
+    conv = False
     dim = HEIGHT
 
     # Create the environment
