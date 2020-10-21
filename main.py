@@ -18,8 +18,8 @@ def load_from_json(filepath):
 
 if __name__ == '__main__':
     reward = [1, -1, 0.9, 0]  # win lose progress no progress
-    filepath = "Result_RANDOM_BOMBS_rerun.json"
-    num_episodes = 15000
+    filepath = "Result_RANDOM_BOMBS_julio.json"
+    num_episodes = 20000
     batch_size = 128
     gamma = 0
     learning_rate = 1e-4
@@ -27,7 +27,7 @@ if __name__ == '__main__':
     WIDTH = 3
     N_BOMBS = 1
     eps = 1.
-    eps_end = 0
+    eps_end = 0.1
     eps_decay = eps/(num_episodes-num_episodes*0.2)
     conv = True
     dim = HEIGHT
