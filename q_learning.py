@@ -46,7 +46,7 @@ def eps_greedy_policy(q_values, eps, forbidden_actions):
 
     random_index = random.randint(0, indices.shape[1]-1)
 
-    best_action_index = indices[random_index] #TODO: make the choice random if more than 1 max value
+    best_action_index = indices[random_index]
     l = len(q_values)
     #if np.all(q_values == q_values[0]):
     #    best_action_index = np.random.randint(0, l)

@@ -15,7 +15,7 @@ def compute_moving_average(data):
     return moving_averages
 
 
-filepath = "Result_RANDOM_BOMBS_.json"
+filepath = "Result_FIXED_BOMBS.json"
 data = load_from_json(filepath)
 if 'moving_avg_wins' not in data.keys():
     moving_avg = compute_moving_average(data["wins"])

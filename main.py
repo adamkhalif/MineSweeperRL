@@ -32,8 +32,8 @@ def load_from_json(filepath):
 
 if __name__ == '__main__':
     reward = [1, -1, 0.3, 0]  # win lose progress no progress
-    filepath = "Result_teststst.json"
-    num_episodes = 500
+    filepath = "Result_testingidngs.json"
+    num_episodes = 5000
     batch_size = 64
     gamma = 0
     learning_rate = 1e-4
@@ -41,7 +41,7 @@ if __name__ == '__main__':
     WIDTH = 3
     N_BOMBS = 1
     eps = 1.
-    eps_end = 0
+    eps_end = 0.1
     eps_decay = eps/(num_episodes-num_episodes*0.1)
     conv = False
     dim = HEIGHT
