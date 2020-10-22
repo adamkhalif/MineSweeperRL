@@ -13,7 +13,7 @@ def plot_reward(data):
     ax2 = ax1.twinx()
     color = 'tab:blue'
     ax2.set_ylabel('Winrate %', color=color)
-    ax2.plot(data["avg_wins"], color=color, label="Average winrate")
+    ax2.plot(data["moving_avg_wins"], color=color, label="Average winrate")
     ax2.tick_params(axis='y', labelcolor=color)
 
     fig.tight_layout()
