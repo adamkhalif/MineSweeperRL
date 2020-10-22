@@ -18,9 +18,9 @@ def load_from_json(filepath):
 
 if __name__ == '__main__':
     reward = [1, -1, 0.9, 0]  # win lose progress no progress
-    filepath = "Result_RANDOM_BOMBS_norm2.json"
-    num_episodes = 2000
-    batch_size = 128
+    filepath = "Result_RANDOM_BOMBS_batch512.json"
+    num_episodes = 50000
+    batch_size = 512
     gamma = 0
     learning_rate = 1e-4
     HEIGHT = 3
@@ -82,6 +82,7 @@ if __name__ == '__main__':
         else:
             break
 
+    #TODO compute sliding average wins
 
     result_dict = {}
     result_dict["conv"] = conv
