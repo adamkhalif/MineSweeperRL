@@ -19,7 +19,7 @@ def load_from_json(filepath):
 if __name__ == '__main__':
     reward = [1, -1, 0.9, 0]  # win lose progress no progress
     filepath = "Result_RANDOM_BOMBS_batch512.json"
-    num_episodes = 50000
+    num_episodes = 200
     batch_size = 512
     gamma = 0
     learning_rate = 1e-4
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     avg_wins_list = []
     R_avg_list = []
 
-    R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress = train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=enable_visualization, batch_size=batch_size, gamma=gamma, eps=eps, eps_end=eps_end, eps_decay=eps_decay)
+    R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress, wins = train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=enable_visualization, batch_size=batch_size, gamma=gamma, eps=eps, eps_end=eps_end, eps_decay=eps_decay)
 
     eps_list.extend(eps)
     avg_wins_list.extend(avg_wins)
@@ -69,7 +69,9 @@ if __name__ == '__main__':
         if inp == 1:
             eps = input("Epsilon?: ")
             eps = float(eps)
-            R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress = train_loop_ddqn(ddqn, env, replay_buffer,
+            eps_end = input("Epsilon end?: ")
+            eps_end = float(eps_end)
+            R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress, wins = train_loop_ddqn(ddqn, env, replay_buffer,
                                                                                            num_episodes,
                                                                                            enable_visualization=enable_visualization,
                                                                                            batch_size=batch_size,
