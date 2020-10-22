@@ -185,6 +185,9 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
             forbidden_actions = env.forbidden_actions
             q_online_curr, curr_action = calc_q_and_take_action(ddqn, state, eps, forbidden_actions)
             q_buffer.append(q_online_curr)
+            if env.first_move:
+                curr_action = 8
+                env.first_move = False
             new_state, reward, finish_episode, _ = env.step(curr_action)  # take one step in the evironment
             new_state = new_state[None, :]
 
