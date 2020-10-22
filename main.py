@@ -18,9 +18,9 @@ def load_from_json(filepath):
 
 if __name__ == '__main__':
     reward = [1, -1, 0.3, 0]  # win lose progress no progress
-    filepath = "Result_RANDOM_BOMBS_no_lose_first.json"
-    num_episodes = 10000
-    batch_size = 256
+    filepath = "Result_RANDOM_BOMBS_no_lose_first15k.json"
+    num_episodes = 15000
+    batch_size = 512
     gamma = 0
     learning_rate = 1e-4
     HEIGHT = 3
@@ -73,6 +73,9 @@ if __name__ == '__main__':
             eps = float(eps)
             eps_end = input("Epsilon end?: ")
             eps_end = float(eps_end)
+            eps_decay = eps / (num_episodes - num_episodes * 0.1)
+            epi = input("Number of episodes?: ")
+            num_episodes = int(epi)
             R_buffer, R_avg, eps, avg_wins, i, ep_reward, R_avg_progress, wins = train_loop_ddqn(ddqn, env, replay_buffer,
                                                                                            num_episodes,
                                                                                            enable_visualization=enable_visualization,
