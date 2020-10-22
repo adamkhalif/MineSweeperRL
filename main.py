@@ -33,12 +33,12 @@ def load_from_json(filepath):
 if __name__ == '__main__':
     reward = [1, -1, 0.3, 0]  # win lose progress no progress
     filepath = "Result_2_bombs_test.json"
-    num_episodes = 15000
+    num_episodes = 50000
     batch_size = 512
     gamma = 0
     learning_rate = 1e-4
-    HEIGHT = 3
-    WIDTH = 3
+    HEIGHT = 4
+    WIDTH = 4
     N_BOMBS = 2
     eps = 1.
     eps_end = 0.1
