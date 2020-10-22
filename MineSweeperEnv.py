@@ -74,6 +74,8 @@ class MineSweeperEnv(gym.Env):
         if self.RANDOM_BOMS:
             for b in range(self.N_BOMBS):
                 self.bomb_env[random.randint(0, self.HEIGHT - 1), random.randint(0, self.WIDTH - 1)] = -2
+                if self.bomb_env[2,2] == -2:
+                    self.reset() #this is done to prevent the agent from losing on the first action
         else:
             self.bomb_env[0,0] = -2
         self.sumNeighbours()

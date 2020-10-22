@@ -17,9 +17,9 @@ def load_from_json(filepath):
     return json_data
 
 if __name__ == '__main__':
-    reward = [1, -1, 0.9, 0]  # win lose progress no progress
-    filepath = "Result_RANDOM_BOMBS_256bc_fc_eps_to_0.json"
-    num_episodes = 10000
+    reward = [1, -1, 0.3, 0]  # win lose progress no progress
+    filepath = "Result_RANDOM_BOMBS_256bc_fc_test.json"
+    num_episodes = 5000
     batch_size = 256
     gamma = 0
     learning_rate = 1e-4
