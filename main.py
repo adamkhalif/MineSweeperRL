@@ -104,8 +104,6 @@ if __name__ == '__main__':
         else:
             break
 
-    #TODO compute sliding average wins
-
     result_dict = {}
     result_dict["conv"] = conv
     result_dict["rewards"] = reward
