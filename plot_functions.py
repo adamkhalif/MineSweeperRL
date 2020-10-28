@@ -1,7 +1,19 @@
-
 import matplotlib.pyplot as plt
 
+
 def plot_reward(data):
+    """
+        Plotting function to evaluate result.
+        plotting structure used form:
+        https://matplotlib.org/gallery/api/two_scales.html
+        creation of legends used from:
+        https://www.delftstack.com/howto/matplotlib/how-to-make-a-single-legend-for-all-subplots-in-matplotlib/
+    Args:
+        data: dictionary containing data to plot
+
+    Returns:
+        -
+    """
     # First line
     fig, ax1 = plt.subplots()
     color = 'tab:red'
@@ -28,4 +40,3 @@ def plot_reward(data):
     fig.legend(lines, labels, loc="upper center")
 
     plt.show()
-

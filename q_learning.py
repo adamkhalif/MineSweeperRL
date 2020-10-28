@@ -3,56 +3,27 @@ from collections import namedtuple
 import torch
 import random
 
-def value_iteration(gamma, mdp):
-    """
-    Returns:
-        V - state value table, numpy array of shape (16,)
-        pi - greedy policy table, numpy array of shape (16,)
-    """
-    V = np.zeros([16])  # state value table
-
-    actions = mdp.get_actions()
-    states = mdp.get_states()
-    pi = np.zeros([16])
-    V_temp = np.zeros([16])
-    while True:
-
-        for s in states:
-            temp = []
-            for a in actions:
-                temp.append(mdp.reward_function(s, a) + gamma * np.dot(mdp.state_transition_func(s, a), V))
-            V_temp[s] = V[s]
-            V[s] = np.max(temp)
-            pi[s] = np.argmax(temp)
-
-        # find policy pi
-        if (V == V_temp).all():
-            break
-
-    return V, pi
+"""
+This file contains all necessary functions to be able to make use of Q-learning. 
+The functions have been copied from the pre defined functions in HA3 and also our own creations in HA3.
+"""
 
 
 def eps_greedy_policy(q_values, eps, forbidden_actions):
-    '''
+    """
     Creates an epsilon-greedy policy
     :param q_values: set of Q-values of shape (num actions,)
     :param eps: probability of taking a uniform random action
+    :param forbidden_actions: list with Bools containing actions already chosen.
     :return: policy of shape (num actions,)
-    '''
+    """
 
     q_values[forbidden_actions] = np.NINF
-    #best_action_index = np.random.choice(np.flatnonzero(q_values == q_values.max()))
     indices = torch.nonzero(q_values == q_values.max())
-
     random_index = random.randint(0, indices.shape[1]-1)
-
     best_action_index = indices[random_index]
     l = len(q_values)
-    #if np.all(q_values == q_values[0]):
-    #    best_action_index = np.random.randint(0, l)
-
     n_forbidden_actions = np.count_nonzero(forbidden_actions)
-
     p = eps / (l-n_forbidden_actions)
 
     policy = np.full([l], p)
@@ -74,22 +45,13 @@ def calc_q_and_take_action(ddqn, state, eps, forbidden_actions):
         curr_action     - Selected action (0 or 1, i.e., left or right), sampled from epsilon-greedy policy. Integer.
     '''
     # FYI:
-    # ddqn.online_model & ddqn.offline_model are Pytorch modules for online / offline Q-networks, which take the state as input, and output the Q-values for all actions.
+    # ddqn.online_model & ddqn.offline_model are Pytorch modules for online / offline Q-networks,
+    # which take the state as input, and output the Q-values for all actions.
     # Input shape (batch_size, num_states). Output shape (batch_size, num_actions).
 
-    # YOUR CODE HERE
-
-    # q_offline = dqqn.offline_model(state)
-    #temp_state = torch.Tensor(state).detach().numpy().flatten()
     state = torch.Tensor(state).detach().flatten()
-
     state = state.to(device=ddqn._device)
     q_online_curr = ddqn.online_model(state)
-    #q_online_curr = ddqn.online_model(torch.Tensor(state)).detach().numpy().flatten()
-
-    #q_online_curr_temp = np.copy(q_online_curr)
-
-    #q_online_curr_temp[forbidden_actions] = np.NINF
 
     pi = eps_greedy_policy(q_online_curr, eps, forbidden_actions)
 
@@ -99,7 +61,7 @@ def calc_q_and_take_action(ddqn, state, eps, forbidden_actions):
 
 
 def calculate_q_targets(q1_batch, q2_batch, r_batch, nonterminal_batch, gamma=.99):
-    '''
+    """
     Calculates the Q target used for the loss
     : param q1_batch: Batch of Q(s', a) from online network. FloatTensor, shape (N, num actions)
     : param q2_batch: Batch of Q(s', a) from target network. FloatTensor, shape (N, num actions)
@@ -107,8 +69,7 @@ def calculate_q_targets(q1_batch, q2_batch, r_batch, nonterminal_batch, gamma=.9
     : param nonterminal_batch: Batch of booleans, with False elements if state s' is terminal and True otherwise. BoolTensor, shape (N,)
     : param gamma: Discount factor, float.
     : return: Q target. FloatTensor, shape (N,)
-    '''
-    # YOUR CODE HERE
+    """
 
     actions = torch.argmax(q1_batch, dim=1)
 
@@ -136,10 +97,9 @@ def sample_batch_and_calculate_loss(ddqn, replay_buffer, batch_size, gamma):
     curr_state, curr_action, reward, next_state, nonterminal = replay_buffer.sample_minibatch(batch_size)
 
     # FYI:
-    # ddqn.online_model & ddqn.offline_model are Pytorch modules for online / offline Q-networks, which take the state as input, and output the Q-values for all actions.
+    # ddqn.online_model & ddqn.offline_model are Pytorch modules for online / offline Q-networks,
+    # which take the state as input, and output the Q-values for all actions.
     # Input shape (batch_size, num_states). Output shape (batch_size, num_actions).
-
-    # YOUR CODE HERE
 
     q_online_curr = ddqn.online_model(curr_state)
     q_online_next = ddqn.online_model(next_state)
@@ -152,7 +112,7 @@ def sample_batch_and_calculate_loss(ddqn, replay_buffer, batch_size, gamma):
     return loss
 
 
-def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization=False, batch_size=64, gamma=.94, eps=1., eps_end=0, eps_decay=.001):
+def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, batch_size=64, gamma=.94, eps=1., eps_end=0, eps_decay=.001):
     Transition = namedtuple("Transition", ["s", "a", "r", "next_s", "t"])
 
     tau = 1000
@@ -175,8 +135,6 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
         steps = 0
 
         while not finish_episode:
-            if enable_visualization:
-                env.render()  # comment this line out if you don't want to / cannot render the environment on your system
             steps += 1
 
             # Take one step in environment. No need to compute gradients,
@@ -188,11 +146,12 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
             if env.first_move:
                 curr_action = 8
                 env.first_move = False
-            new_state, reward, finish_episode, _ = env.step(curr_action)  # take one step in the evironment
+            new_state, reward, finish_episode, _ = env.step(curr_action)  # take one step in the environment
             new_state = new_state[None, :]
 
             # Assess whether terminal state was reached.
-            # The episode may end due to having reached 200 steps, but we should not regard this as reaching the terminal state, and hence not disregard Q(s',a) from the Q target.
+            # The episode may end due to having reached 200 steps, but we should not regard this as reaching the
+            # terminal state, and hence not disregard Q(s',a) from the Q target.
             # https://arxiv.org/abs/1712.00378
             nonterminal_to_buffer = not finish_episode or steps == 200
 
@@ -223,7 +182,6 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
             wins.append(1)
         else:
             wins.append(0)
-        #if (i % 50) == 0:
         R_eps.append(eps)
         R_i.append(i)
         R_ep_reward.append(ep_reward)
@@ -235,17 +193,7 @@ def train_loop_ddqn(ddqn, env, replay_buffer, num_episodes, enable_visualization
             R_avg_wins.append(avg_wins)
             avg_progress = sum(R_clickable_boxes[-100::])/100
             R_avg_progress.append(avg_progress)
-            print('Epsilon: {:.3f}, Win rate: {:.2f}%, Episode {:d}, Clickable boxes left: {:d}, Win?: {:1d}, Reward: {:.1f}'.format(eps,avg_wins, i, env.n_not_bombs_left, env.WIN, ep_reward))
-            """print('Episode: {:d}, Total Reward (running avg): {:4.1f} ({:.2f}) Epsilon: {:.3f}, Avg Q: {:.4g}'.format(i,
-                                                                                                                  ep_reward,
-                                                                                                                  R_avg[
-                                                                                                                      -1],
-                                                                                                                  eps,
-                                                                                                                  np.mean(
-                                                                                                                      np.array(
-                                                                                                                          q_buffer))))
-    """
-
+            print('Epsilon: {:.3f}, Win rate: {:.2f}%, Episode {:d}, Clickable boxes left: {:d}, Win?: {:1d},'
+                  ' ''Reward: {:.1f}'.format(eps, avg_wins, i, env.n_not_bombs_left, env.WIN, ep_reward))
 
     return R_buffer, R_avg, R_eps, R_avg_wins, R_i, R_ep_reward, R_avg_progress, wins
-
