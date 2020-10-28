@@ -31,7 +31,10 @@ def compute_moving_average(data):
         i += 1
     return moving_averages
 
-
+# Try setting filepath equal to one of these to test this script
+# "Result_random_agent.json"
+# "Result_FIXED_BOMBS.json"
+# "Result_RANDOM_BOMBS_no_lose_first_15k.json"
 filepath = "Result_random_agent.json"
 data = load_from_json(filepath)
 if 'moving_avg_wins' not in data.keys():
